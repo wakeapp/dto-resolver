@@ -1,0 +1,18 @@
+{
+    "name":        "wakeapp/dto-resolver",
+    "description": "Provides possibility for working with DTO and resolving them in them-self",
+    "type":        "library",
+    "keywords":    ["dto", "component", "resolver", "symfony-resolver"],
+    "license":     "proprietary",
+
+    "require": {
+        "php":                          "~7.1",
+        "symfony/options-resolver":     "~2.8||~3.0||~4.0"
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Wakeapp\\Component\\DtoResolver\\": ""
+        }
+    }
+}
