@@ -74,7 +74,7 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
      */
     protected function configureOptions(OptionsResolver $options): void
     {
-        $options->setDefined(array_keys($this->toArray()));
+        $options->setDefined(array_keys($this->toArray(false)));
     }
 
     /**
