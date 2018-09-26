@@ -42,11 +42,17 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
     public function resolve(array $data): self
     {
         $resolver = $this->getOptionsResolver();
-        $resolvedData = $resolver->resolve($this->getOnlyDefinedData($data));
+
+        $normalizedData = [];
+
+        foreach ($data as $propertyName => $value) {
+            $normalizedPropertyName = $this->normalizeDefinedKey($propertyName);
+            $normalizedData[$normalizedPropertyName] = $value;
+        }
+
+        $resolvedData = $resolver->resolve($this->getOnlyDefinedData($normalizedData));
 
         foreach ($resolvedData as $propertyName => $value) {
-            $propertyName = $this->normalizeDefinedKey($propertyName);
-
             $this->$propertyName = $value;
         }
 
@@ -96,10 +102,8 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
             return $this->optionsResolver;
         }
 
-        $resolver = new OptionsResolver();
-        $this->configureOptions($resolver);
-
-        $this->optionsResolver = $resolver;
+        $this->optionsResolver = new OptionsResolver();
+        $this->configureOptions($this->optionsResolver);
 
         return $this->optionsResolver;
     }

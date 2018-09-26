@@ -1,3 +1,9 @@
+## [Unreleased] [BC]
+### Changed
+- Process property name normalization before resolving.
+### Fixed
+- Improved stability against recursion.
+
 ## [0.1.1] 2018-09-19
 ### Fixed
 - Fixed circular reference in the default realisation of the `configureOptions` method.
