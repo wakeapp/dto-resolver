@@ -80,7 +80,7 @@ class AcmeUserDto extends AbstractDtoResolver
 }
 ```
 
-Заполнение DTO данными:
+#### Заполнение DTO данными
 
 ```php
 <?php
@@ -99,6 +99,24 @@ echo json_encode($dto); // {"email":"test@gmail.com","username":"test_user","ful
 **Внимание:** важной особенностью работы метода `resolve` является автоматическая нормализация ключей
 входящего массива данных. Метод корректно заполнит данные вашего `DTO` даже в тех случаях когда будут
 переданы массива `full-name` или `full_name` вместо `fullName`.
+
+#### Заполнение посредством фабрики
+
+Когда в вашем проекте используется множество Dto стоит воспользоваться фабрикой: 
+
+```php
+<?php
+
+$dtoFactory = new \Wakeapp\Component\DtoResolver\Factory\DtoResolverFactory();
+
+$dto = $dtoFactory->createDto(AcmeUserDto::class, [
+    'email' => 'test@gmail.com',
+    'username' => 'test_user',
+    'fullName' => 'Test User']
+);
+
+echo json_encode($dto); // {"email":"test@gmail.com","username":"test_user","fullName":"Test User"}
+```
 
 ### Добавление валидации данных
 

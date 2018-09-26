@@ -1,4 +1,6 @@
-## [Unreleased] [BC]
+## [0.2.0] 2018-09-26 [BC]
+### Added
+- Added `DtoResolverFactory`.
 ### Changed
 - Process property name normalization before resolving.
 ### Fixed
