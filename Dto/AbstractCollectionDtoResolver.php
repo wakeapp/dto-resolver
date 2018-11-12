@@ -53,12 +53,52 @@ abstract class AbstractCollectionDtoResolver extends AbstractDtoResolver impleme
      */
     public function toArray(bool $onlyDefinedData = true): array
     {
-        $result =[];
+        $result = [];
 
         foreach ($this->collection as $item) {
             $result[] = $item->toArray($onlyDefinedData);
         }
 
         return $result;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function next()
+    {
+        next($this->collection);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function current()
+    {
+        return $this->collection[$this->key()];
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function rewind()
+    {
+        reset($this->collection);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function key()
+    {
+        return key($this->collection);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function valid(): bool
+    {
+        return isset($this->collection[$this->key()]);
     }
 }

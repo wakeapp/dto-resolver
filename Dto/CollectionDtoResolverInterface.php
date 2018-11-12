@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Wakeapp\Component\DtoResolver\Dto;
 
+use Iterator;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
 
-interface CollectionDtoResolverInterface extends DtoResolverInterface
+interface CollectionDtoResolverInterface extends DtoResolverInterface, Iterator
 {
     /**
      * Add item to the collection
