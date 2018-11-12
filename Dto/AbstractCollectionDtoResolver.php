@@ -66,17 +66,15 @@ abstract class AbstractCollectionDtoResolver
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function next()
     {
         next($this->collection);
-
-        return $this->key();
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function current()
     {
@@ -84,15 +82,15 @@ abstract class AbstractCollectionDtoResolver
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function rewind()
     {
-        return reset($this->collection);
+        reset($this->collection);
     }
 
     /**
-     * @return mixed
+     * {@inheritdoc}
      */
     public function key()
     {
@@ -100,7 +98,7 @@ abstract class AbstractCollectionDtoResolver
     }
 
     /**
-     * @return bool
+     * {@inheritdoc}
      */
     public function valid(): bool
     {
