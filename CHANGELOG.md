@@ -1,3 +1,7 @@
+## [0.2.1] 2018-11-12
+### Added
+- Added `Iterator` implementation for the `AbstractCollectionDtoResolver`.
+
 ## [0.2.0] 2018-09-26 [BC]
 ### Added
 - Added `DtoResolverFactory`.

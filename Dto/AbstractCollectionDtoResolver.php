@@ -5,11 +5,8 @@ declare(strict_types=1);
 namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
-use Iterator;
 
-abstract class AbstractCollectionDtoResolver
-    extends AbstractDtoResolver
-    implements CollectionDtoResolverInterface, Iterator
+abstract class AbstractCollectionDtoResolver extends AbstractDtoResolver implements CollectionDtoResolverInterface
 {
     /**
      * @var DtoResolverInterface[]
