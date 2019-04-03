@@ -22,6 +22,7 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
     public function injectResolver(OptionsResolver $resolver): self
     {
         $this->optionsResolver = $resolver;
+        $this->configureOptions($this->optionsResolver);
 
         return $this;
     }
@@ -76,11 +77,11 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
     }
 
     /**
-     * @param OptionsResolver $options
+     * @param OptionsResolver $resolver
      */
-    protected function configureOptions(OptionsResolver $options): void
+    protected function configureOptions(OptionsResolver $resolver): void
     {
-        $options->setDefined(array_keys($this->toArray(false)));
+        $resolver->setDefined(array_keys($this->toArray(false)));
     }
 
     /**
