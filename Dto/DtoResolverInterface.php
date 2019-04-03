@@ -5,8 +5,9 @@ declare(strict_types=1);
 namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use JsonSerializable;
 
-interface DtoResolverInterface
+interface DtoResolverInterface extends JsonSerializable
 {
     /**
      * Inject custom resolver
