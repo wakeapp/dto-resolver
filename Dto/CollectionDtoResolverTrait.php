@@ -6,8 +6,10 @@ namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
 
-abstract class AbstractCollectionDtoResolver extends AbstractDtoResolver implements CollectionDtoResolverInterface
+trait CollectionDtoResolverTrait
 {
+    use DtoResolverTrait;
+
     /**
      * @var DtoResolverInterface[]
      */

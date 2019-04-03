@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Wakeapp\Component\DtoResolver\Dto;
 
-use JsonSerializable;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializable
+trait DtoResolverTrait
 {
     /**
      * @var OptionsResolver
@@ -22,6 +21,7 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
     public function injectResolver(OptionsResolver $resolver): self
     {
         $this->optionsResolver = $resolver;
+        $this->optionsResolver->setDefined(array_keys($this->toArray(false)));
         $this->configureOptions($this->optionsResolver);
 
         return $this;
@@ -81,7 +81,6 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
      */
     protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefined(array_keys($this->toArray(false)));
     }
 
     /**
@@ -104,6 +103,7 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
         }
 
         $this->optionsResolver = new OptionsResolver();
+        $this->optionsResolver->setDefined(array_keys($this->toArray(false)));
         $this->configureOptions($this->optionsResolver);
 
         return $this->optionsResolver;
