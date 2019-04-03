@@ -14,21 +14,17 @@ trait DtoResolverTrait
     private $optionsResolver;
 
     /**
-     * {@inheritdoc}
-     *
-     * @return self
+     * @param OptionsResolver $resolver
      */
-    public function injectResolver(OptionsResolver $resolver): self
+    public function injectResolver(OptionsResolver $resolver): void
     {
         $this->optionsResolver = $resolver;
         $this->optionsResolver->setDefined(array_keys($this->toArray(false)));
         $this->configureOptions($this->optionsResolver);
-
-        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function jsonSerialize(): array
     {
@@ -36,11 +32,9 @@ trait DtoResolverTrait
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return self
+     * @param array $data
      */
-    public function resolve(array $data): self
+    public function resolve(array $data): void
     {
         $resolver = $this->getOptionsResolver();
 
@@ -54,14 +48,16 @@ trait DtoResolverTrait
         $resolvedData = $resolver->resolve($this->getOnlyDefinedData($normalizedData));
 
         foreach ($resolvedData as $propertyName => $value) {
-            $this->$propertyName = $value;
+            if (property_exists($this, $propertyName)) {
+                $this->$propertyName = $value;
+            }
         }
-
-        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @param bool $onlyDefinedData
+     *
+     * @return array
      */
     public function toArray(bool $onlyDefinedData = true): array
     {
