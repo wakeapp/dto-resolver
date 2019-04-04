@@ -1,4 +1,4 @@
-## [Unreleased]
+## [0.3.0] 2019-04-04
 ### Added
 - Added `injectResolver` method into `CollectionDtoResolverTrait`.
 - Added `getOptionResolver` method into `CollectionDtoResolverTrait`.
