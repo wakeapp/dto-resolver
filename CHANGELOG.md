@@ -1,3 +1,8 @@
+## [0.3.1] 2019-04-04
+### Added
+- Added `.phpstorm.meta.php`.
+- Added `DtoResolverFactory::create()`.
+
 ## [0.3.0] 2019-04-04
 ### Added
 - Added `injectResolver` method into `CollectionDtoResolverTrait`.
