@@ -1,3 +1,15 @@
+## [Unreleased]
+### Added
+- Added `injectResolver` method into `CollectionDtoResolverTrait`.
+- Added `getOptionResolver` method into `CollectionDtoResolverTrait`.
+- Added property existence check for `resolve` method in `DtoResolverTrait`.
+### Changed
+- Transform `AbstractDtoResolver` class into `DtoResolverTrait`.
+- Transform `AbstractCollectionDtoResolver` class into `CollectionDtoResolverTrait`.
+- Transfer `setDefined` method from `configureOptions` to `injectResolver` in `DtoResolverTrait`
+- Fixed annotations into `CollectionDtoResolverInterface`, `CollectionDtoResolverTrait`, 
+`DtoResolverInterface`, `DtoResolverTrait`.
+
 ## [0.2.1] 2018-11-12
 ### Added
 - Added `Iterator` implementation for the `AbstractCollectionDtoResolver`.

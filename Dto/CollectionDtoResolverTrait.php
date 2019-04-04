@@ -4,19 +4,25 @@ declare(strict_types=1);
 
 namespace Wakeapp\Component\DtoResolver\Dto;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
 
-abstract class AbstractCollectionDtoResolver extends AbstractDtoResolver implements CollectionDtoResolverInterface
+trait CollectionDtoResolverTrait
 {
+    /**
+     * @var OptionsResolver
+     */
+    private $optionsResolver;
+
     /**
      * @var DtoResolverInterface[]
      */
     private $collection = [];
 
     /**
-     * {@inheritdoc}
+     * @param array $item
      */
-    public function add(array $item): self
+    public function add(array $item): void
     {
         $className = $this->getEntryDtoClassName();
 
@@ -37,19 +43,17 @@ abstract class AbstractCollectionDtoResolver extends AbstractDtoResolver impleme
         $id = spl_object_hash($entryDto);
 
         $this->collection[$id] = $entryDto;
-
-        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @return string
      */
     abstract public function getEntryDtoClassName(): string;
 
     /**
-     * {@inheritdoc}
+     * @param bool $onlyDefinedData
      *
-     * @return array[]
+     * @return array
      */
     public function toArray(bool $onlyDefinedData = true): array
     {
@@ -62,32 +66,26 @@ abstract class AbstractCollectionDtoResolver extends AbstractDtoResolver impleme
         return $result;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function next()
     {
         next($this->collection);
     }
 
     /**
-     * {@inheritdoc}
+     * @return DtoResolverInterface
      */
     public function current()
     {
         return $this->collection[$this->key()];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function rewind()
     {
         reset($this->collection);
     }
 
     /**
-     * {@inheritdoc}
+     * @return int|string|null
      */
     public function key()
     {
@@ -95,10 +93,26 @@ abstract class AbstractCollectionDtoResolver extends AbstractDtoResolver impleme
     }
 
     /**
-     * {@inheritdoc}
+     * @return bool
      */
     public function valid(): bool
     {
         return isset($this->collection[$this->key()]);
+    }
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function injectResolver(OptionsResolver $resolver): void
+    {
+        $this->optionsResolver = $resolver;
+    }
+
+    /**
+     * @return OptionsResolver
+     */
+    protected function getOptionsResolver(): OptionsResolver
+    {
+        return $this->optionsResolver;
     }
 }

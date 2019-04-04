@@ -23,9 +23,6 @@ DTO Resolver
 Использование
 -------------
 
-Важной особенностью архитектуры компонента является необходимость объявления параметров вашего `DTO`
-с областью видимости **protected**.
-
 ### Создание DTO
 
 ```php
@@ -35,10 +32,13 @@ declare(strict_types=1);
 
 namespace AcmeBundle\Dto;
 
-use Wakeapp\Component\DtoResolver\Dto\AbstractDtoResolver;
+use Wakeapp\Component\DtoResolver\Dto\DtoResolverTrait;
+use Wakeapp\Component\DtoResolver\Dto\DtoResolverInterface;
 
-class AcmeUserDto extends AbstractDtoResolver
+class AcmeUserDto implements DtoResolverInterface
 {
+    use DtoResolverTrait;
+    
     /**
      * @var string
      */
@@ -128,10 +128,13 @@ declare(strict_types=1);
 namespace AcmeBundle\Dto;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use Wakeapp\Component\DtoResolver\Dto\AbstractDtoResolver;
+use Wakeapp\Component\DtoResolver\Dto\DtoResolverInterface;
+use Wakeapp\Component\DtoResolver\Dto\DtoResolverTrait;
 
-class AcmeUserDto extends AbstractDtoResolver
+class AcmeUserDto implements DtoResolverInterface
 {
+    use DtoResolverTrait;
+    
     // ...
     
     /**
@@ -165,10 +168,13 @@ declare(strict_types=1);
 
 namespace AcmeBundle\Dto;
 
-use Wakeapp\Component\DtoResolver\Dto\AbstractCollectionDtoResolver;
+use Wakeapp\Component\DtoResolver\Dto\CollectionDtoResolverTrait;
+use Wakeapp\Component\DtoResolver\Dto\CollectionDtoResolverInterface;
 
-class AcmeUserCollectionDto extends AbstractCollectionDtoResolver
+class AcmeUserCollectionDto implements CollectionDtoResolverInterface
 {
+    use CollectionDtoResolverTrait;
+    
     /**
      * {@inheritdoc}
      */
@@ -225,7 +231,6 @@ echo $entryDto->getEmail(); // test@gmail.com
 
 В случае когда вам необходимо использовать объект `OptionResolver`,
 созданный сторонним сервисом - вы можете воспользоваться методом `injectResolver`.
-В этом случае любое стандартно сконфигурированное поведение в методе `configureOptions` будет потеряно.
 
 ### Получение объекта OptionResolver
 

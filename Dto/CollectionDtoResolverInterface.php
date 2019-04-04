@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Iterator;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
 
-interface CollectionDtoResolverInterface extends DtoResolverInterface, Iterator
+interface CollectionDtoResolverInterface extends Iterator
 {
     /**
      * Add item to the collection
@@ -16,7 +17,7 @@ interface CollectionDtoResolverInterface extends DtoResolverInterface, Iterator
      *
      * @throws InvalidCollectionItemException When received unsupported collection item
      */
-    public function add(array $item);
+    public function add(array $item): void;
 
     /**
      * Returns name of the supported entry dto
@@ -27,9 +28,14 @@ interface CollectionDtoResolverInterface extends DtoResolverInterface, Iterator
     public function getEntryDtoClassName(): string;
 
     /**
-     * {@inheritdoc}
+     * @param bool $onlyDefinedData
      *
-     * @return array[]
+     * @return array
      */
     public function toArray(bool $onlyDefinedData = true): array;
+
+    /**
+     * @param OptionsResolver $resolver
+     */
+    public function injectResolver(OptionsResolver $resolver): void;
 }

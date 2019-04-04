@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Wakeapp\Component\DtoResolver\Dto;
 
-use JsonSerializable;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializable
+trait DtoResolverTrait
 {
     /**
      * @var OptionsResolver
@@ -15,20 +14,17 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
     private $optionsResolver;
 
     /**
-     * {@inheritdoc}
-     *
-     * @return self
+     * @param OptionsResolver $resolver
      */
-    public function injectResolver(OptionsResolver $resolver): self
+    public function injectResolver(OptionsResolver $resolver): void
     {
         $this->optionsResolver = $resolver;
+        $this->optionsResolver->setDefined(array_keys($this->toArray(false)));
         $this->configureOptions($this->optionsResolver);
-
-        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @return array
      */
     public function jsonSerialize(): array
     {
@@ -36,11 +32,9 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
     }
 
     /**
-     * {@inheritdoc}
-     *
-     * @return self
+     * @param array $data
      */
-    public function resolve(array $data): self
+    public function resolve(array $data): void
     {
         $resolver = $this->getOptionsResolver();
 
@@ -54,14 +48,16 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
         $resolvedData = $resolver->resolve($this->getOnlyDefinedData($normalizedData));
 
         foreach ($resolvedData as $propertyName => $value) {
-            $this->$propertyName = $value;
+            if (property_exists($this, $propertyName)) {
+                $this->$propertyName = $value;
+            }
         }
-
-        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @param bool $onlyDefinedData
+     *
+     * @return array
      */
     public function toArray(bool $onlyDefinedData = true): array
     {
@@ -81,7 +77,6 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
      */
     protected function configureOptions(OptionsResolver $resolver): void
     {
-        $resolver->setDefined(array_keys($this->toArray(false)));
     }
 
     /**
@@ -104,6 +99,7 @@ abstract class AbstractDtoResolver implements DtoResolverInterface, JsonSerializ
         }
 
         $this->optionsResolver = new OptionsResolver();
+        $this->optionsResolver->setDefined(array_keys($this->toArray(false)));
         $this->configureOptions($this->optionsResolver);
 
         return $this->optionsResolver;
