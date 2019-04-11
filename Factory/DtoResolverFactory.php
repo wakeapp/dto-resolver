@@ -10,19 +10,6 @@ use Wakeapp\Component\DtoResolver\Exception\InvalidDtoClassException;
 class DtoResolverFactory
 {
     /**
-     * @deprecated use DtoResolverFactory::create() instead
-     *
-     * @param string $className
-     * @param array $data
-     *
-     * @return DtoResolverInterface
-     */
-    public function createDto(string $className, array $data): DtoResolverInterface
-    {
-        return self::create($className, $data);
-    }
-
-    /**
      * @param string $className
      * @param array $data
      *
