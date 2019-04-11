@@ -1,4 +1,4 @@
-## [Unreleased]
+## [0.4.0] 2019-04-11
 ### Added
 - Added `jsonSerialize` method in `CollectionDtoResolverTrait`.
 - `CollectionDtoResolverInterface` implements `JsonSerializable` now.
