@@ -7,8 +7,9 @@ namespace Wakeapp\Component\DtoResolver\Dto;
 use Iterator;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
+use JsonSerializable;
 
-interface CollectionDtoResolverInterface extends Iterator
+interface CollectionDtoResolverInterface extends Iterator, JsonSerializable
 {
     /**
      * Add item to the collection

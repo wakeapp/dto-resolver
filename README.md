@@ -107,9 +107,7 @@ echo json_encode($dto); // {"email":"test@gmail.com","username":"test_user","ful
 ```php
 <?php
 
-$dtoFactory = new \Wakeapp\Component\DtoResolver\Factory\DtoResolverFactory();
-
-$dto = $dtoFactory->createDto(AcmeUserDto::class, [
+$dto = \Wakeapp\Component\DtoResolver\Factory\DtoResolverFactory::create(AcmeUserDto::class, [
     'email' => 'test@gmail.com',
     'username' => 'test_user',
     'fullName' => 'Test User']

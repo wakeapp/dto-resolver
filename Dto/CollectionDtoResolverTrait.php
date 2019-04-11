@@ -109,6 +109,14 @@ trait CollectionDtoResolverTrait
     }
 
     /**
+     * @return array
+     */
+    public function jsonSerialize(): array
+    {
+        return $this->toArray();
+    }
+
+    /**
      * @return OptionsResolver
      */
     protected function getOptionsResolver(): OptionsResolver

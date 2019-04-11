@@ -1,3 +1,8 @@
+## [Unreleased]
+### Added
+- Added `jsonSerialize` method in `CollectionDtoResolverTrait`.
+- `CollectionDtoResolverInterface` implements `JsonSerializable` now.
+
 ## [0.3.1] 2019-04-04
 ### Added
 - Added `.phpstorm.meta.php`.
