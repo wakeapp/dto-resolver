@@ -6,6 +6,11 @@ namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
+use function is_subclass_of;
+use function key;
+use function next;
+use function reset;
+use function spl_object_hash;
 
 trait CollectionDtoResolverTrait
 {
@@ -20,26 +25,25 @@ trait CollectionDtoResolverTrait
     private $collection = [];
 
     /**
+     * @param OptionsResolver|null $resolver
+     */
+    public function __construct(?OptionsResolver $resolver = null)
+    {
+        $this->optionsResolver = $resolver;
+    }
+
+    /**
      * @param array $item
      */
     public function add(array $item): void
     {
         $className = $this->getEntryDtoClassName();
 
-        $entryDto = new $className();
-
-        if (!$entryDto instanceof DtoResolverInterface) {
+        if (is_subclass_of($className, DtoResolverInterface::class)) {
             throw new InvalidCollectionItemException(DtoResolverInterface::class);
         }
 
-        $resolver = $this->getOptionsResolver();
-
-        if ($resolver) {
-            $entryDto->injectResolver($resolver);
-        }
-
-        $entryDto->resolve($item);
-
+        $entryDto = new $className($item, $this->optionsResolver);
         $id = spl_object_hash($entryDto);
 
         $this->collection[$id] = $entryDto;
@@ -101,26 +105,10 @@ trait CollectionDtoResolverTrait
     }
 
     /**
-     * @param OptionsResolver $resolver
-     */
-    public function injectResolver(OptionsResolver $resolver): void
-    {
-        $this->optionsResolver = $resolver;
-    }
-
-    /**
      * @return array
      */
     public function jsonSerialize(): array
     {
         return $this->toArray();
-    }
-
-    /**
-     * @return OptionsResolver
-     */
-    protected function getOptionsResolver(): OptionsResolver
-    {
-        return $this->optionsResolver;
     }
 }

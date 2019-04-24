@@ -5,7 +5,7 @@ DTO Resolver
 --------
 
 Компонент предоставляет базовый функционал для безопасной работы с `DTO`. Интерфейсы и базовая реализация обеспечивают
-косистентность записанных в `DTO` данных исключая возможность их модификации.
+консистентность записанных в `DTO` данных исключая возможность их модификации.
 Компонент построен на основе [OptionsResolver](https://github.com/symfony/options-resolver) и позволяет валидировать
 и нормальзировать данные, переданные в `DTO`.
 
@@ -26,9 +26,7 @@ DTO Resolver
 ### Создание DTO
 
 ```php
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace AcmeBundle\Dto;
 
@@ -83,10 +81,9 @@ class AcmeUserDto implements DtoResolverInterface
 #### Заполнение DTO данными
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
-$dto = new AcmeUserDto();
-$dto->resolve(['email' => 'test@gmail.com', 'username' => 'test_user', 'fullName' => 'Test User']);
+$dto = new AcmeUserDto(['email' => 'test@gmail.com', 'username' => 'test_user', 'fullName' => 'Test User']);
 
 echo $dto->getUsername(); // test_user
 echo $dto->getEmail(); // test@gmail.com
@@ -96,32 +93,14 @@ print_r($dto->toArray()); // Array ([email] => test@gmail.com [username] => test
 echo json_encode($dto); // {"email":"test@gmail.com","username":"test_user","fullName":"Test User"}
 ```
 
-**Внимание:** важной особенностью работы метода `resolve` является автоматическая нормализация ключей
-входящего массива данных. Метод корректно заполнит данные вашего `DTO` даже в тех случаях когда будут
+**Внимание:** важной особенностью работы компонеты - является автоматическая нормализация ключей
+входящего массива данных. Метод корректно заполнит данные вашего `DTO` даже в тех случаях, когда будут
 переданы массива `full-name` или `full_name` вместо `fullName`.
-
-#### Заполнение посредством фабрики
-
-Когда в вашем проекте используется множество Dto стоит воспользоваться фабрикой: 
-
-```php
-<?php
-
-$dto = \Wakeapp\Component\DtoResolver\Factory\DtoResolverFactory::create(AcmeUserDto::class, [
-    'email' => 'test@gmail.com',
-    'username' => 'test_user',
-    'fullName' => 'Test User']
-);
-
-echo json_encode($dto); // {"email":"test@gmail.com","username":"test_user","fullName":"Test User"}
-```
 
 ### Добавление валидации данных
 
 ```php
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace AcmeBundle\Dto;
 
@@ -150,19 +129,16 @@ class AcmeUserDto implements DtoResolverInterface
 Заполнение DTO данными:
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
-$entryDto = new AcmeUserDto();
-$entryDto->resolve(['email' => 'test@gmail.com']); // ошибка: отсутвует обязательное смещение username
-$entryDto->resolve(['email' => 123, 'username' => 'test_user']); // ошибка: email имеет недопустимый тип данных
+$entryDto = new AcmeUserDto(['email' => 'test@gmail.com']); // ошибка: отсутвует обязательное смещение username
+$entryDto = new AcmeUserDto(['email' => 123, 'username' => 'test_user']); // ошибка: email имеет недопустимый тип данных
 ```
 
 ### Использование коллекций DTO
 
 ```php
-<?php
-
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 namespace AcmeBundle\Dto;
 
@@ -186,13 +162,12 @@ class AcmeUserCollectionDto implements CollectionDtoResolverInterface
 Заполнение коллекции DTO данными:
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
+/** @var \Wakeapp\Component\DtoResolver\Dto\CollectionDtoResolverInterface $collectionDto */
 $collectionDto = new AcmeUserCollectionDto();
-$collectionDto
-    ->add(['email' => '1_test@gmail.com', 'username' => '1_test_user', 'fullName' => '1 Test User'])
-    ->add(['email' => '2_test@gmail.com', 'username' => '2_test_user', 'fullName' => '2 Test User'])
-;
+$collectionDto->add(['email' => '1_test@gmail.com', 'username' => '1_test_user', 'fullName' => '1 Test User']);
+$collectionDto->add(['email' => '2_test@gmail.com', 'username' => '2_test_user', 'fullName' => '2 Test User']);
 
 print_r($collectionDto->toArray()); 
 // Array (
@@ -210,13 +185,12 @@ echo json_encode($collectionDto);
 ### Преобразование DTO в массив
 
 ```php
-<?php
+<?php declare(strict_types=1);
 
+/** @var \Wakeapp\Component\DtoResolver\Dto\CollectionDtoResolverInterface $collectionDto */
 $entryDto = new AcmeUserCollectionDto();
-$entryDto
-    ->add(['email' => '1_test@gmail.com', 'username' => '1_test_user', 'fullName' => '1 Test User'])
-    ->add(['email' => '2_test@gmail.com', 'username' => '2_test_user', 'fullName' => '2 Test User'])
-;
+$entryDto->add(['email' => '1_test@gmail.com', 'username' => '1_test_user', 'fullName' => '1 Test User']);
+$entryDto->add(['email' => '2_test@gmail.com', 'username' => '2_test_user', 'fullName' => '2 Test User']);
 
 echo $entryDto->getUsername(); // test_user
 echo $entryDto->getEmail(); // test@gmail.com
