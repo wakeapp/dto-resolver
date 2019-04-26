@@ -20,12 +20,11 @@ interface CollectionDtoResolverInterface extends Iterator, JsonSerializable
     public function add(array $item): void;
 
     /**
-     * Returns name of the supported entry dto
-     * @see DtoResolverInterface
+     * Returns name of the supported collection {@see DtoResolverInterface}
      *
      * @return string
      */
-    public function getEntryDtoClassName(): string;
+    public static function getItemDtoClassName(): string;
 
     /**
      * @param bool $onlyDefinedData

@@ -35,7 +35,10 @@ trait DtoResolverTrait
         $resolver->setDefined(array_keys($this->toArray(false)));
 
         $this->configureOptions($resolver);
-        $this->resolve($data, $resolver);
+
+        $this->optionsResolver = $resolver;
+
+        $this->resolve($data);
     }
 
     /**
@@ -55,11 +58,11 @@ trait DtoResolverTrait
     {
         $data = get_object_vars($this);
 
+        unset($data['optionsResolver']);
+
         if ($onlyDefinedData) {
             return $this->getOnlyDefinedData($data);
         }
-
-        unset($data['optionsResolver']);
 
         return $data;
     }
@@ -78,7 +81,15 @@ trait DtoResolverTrait
      */
     protected function getOnlyDefinedData(array $data): array
     {
-        return array_intersect_key($data, array_flip($this->optionsResolver->getDefinedOptions()));
+        return array_intersect_key($data, array_flip($this->getOptionResolver()->getDefinedOptions()));
+    }
+
+    /**
+     * @return OptionsResolver
+     */
+    protected function getOptionResolver(): OptionsResolver
+    {
+        return $this->optionsResolver;
     }
 
     /**
@@ -111,9 +122,8 @@ trait DtoResolverTrait
 
     /**
      * @param array $data
-     * @param OptionsResolver $resolver
      */
-    protected function resolve(array $data, OptionsResolver $resolver): void
+    protected function resolve(array $data): void
     {
         $normalizedData = [];
 
@@ -122,14 +132,12 @@ trait DtoResolverTrait
             $normalizedData[$normalizedPropertyName] = $value;
         }
 
-        $resolvedData = $resolver->resolve($this->getOnlyDefinedData($normalizedData));
+        $resolvedData = $this->getOptionResolver()->resolve($this->getOnlyDefinedData($normalizedData));
 
         foreach ($resolvedData as $propertyName => $value) {
             if (property_exists($this, $propertyName)) {
                 $this->$propertyName = $value;
             }
         }
-
-        $this->optionsResolver = $resolver;
     }
 }

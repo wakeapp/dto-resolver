@@ -152,7 +152,7 @@ class AcmeUserCollectionDto implements CollectionDtoResolverInterface
     /**
      * {@inheritdoc}
      */
-    public function getEntryDtoClassName(): string
+    public static function getItemDtoClassName(): string
     {
         return AcmeUserDto::class;
     }

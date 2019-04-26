@@ -2,8 +2,10 @@
 ### Changed
 - Added `CollectionDtoResolverTrait::__construct()` with optional `OptionsResolver`.
 - Added `DtoResolverTrait::__construct()` with required `array $data` and optional `OptionsResolver`.
+- Added static method `CollectionDtoResolverInterface::getItemDtoClassName`.
 ### Removed
 - Removed `CollectionDtoResolverInterface::injectResolver`.
+- Removed `CollectionDtoResolverInterface::getEntryDtoClassName`.
 - Removed `DtoResolverInterface::injectResolver` and `DtoResolverInterface::resolve`.
 - Removed `DtoResolverFactory`.
 

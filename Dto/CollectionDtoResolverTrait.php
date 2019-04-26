@@ -37,9 +37,9 @@ trait CollectionDtoResolverTrait
      */
     public function add(array $item): void
     {
-        $className = $this->getEntryDtoClassName();
+        $className = self::getItemDtoClassName();
 
-        if (is_subclass_of($className, DtoResolverInterface::class)) {
+        if (!is_subclass_of($className, DtoResolverInterface::class)) {
             throw new InvalidCollectionItemException(DtoResolverInterface::class);
         }
 
@@ -48,11 +48,6 @@ trait CollectionDtoResolverTrait
 
         $this->collection[$id] = $entryDto;
     }
-
-    /**
-     * @return string
-     */
-    abstract public function getEntryDtoClassName(): string;
 
     /**
      * @param bool $onlyDefinedData
