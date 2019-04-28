@@ -5,31 +5,44 @@ declare(strict_types=1);
 namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Wakeapp\Component\DtoResolver\Exception\FieldForIndexNotFoundException;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
 use function is_subclass_of;
 use function key;
 use function next;
 use function reset;
-use function spl_object_hash;
 
 trait CollectionDtoResolverTrait
 {
-    /**
-     * @var OptionsResolver
-     */
-    private $optionsResolver;
-
     /**
      * @var DtoResolverInterface[]
      */
     private $collection = [];
 
     /**
-     * @param OptionsResolver|null $resolver
+     * @var string|null
      */
-    public function __construct(?OptionsResolver $resolver = null)
+    private $indexBy = null;
+
+    /**
+     * @var OptionsResolver
+     */
+    private $optionsResolver;
+
+    /**
+     * @param OptionsResolver|null $resolver
+     * @param string|null $indexBy
+     */
+    public function __construct(?OptionsResolver $resolver = null, ?string $indexBy = null)
     {
         $this->optionsResolver = $resolver;
+        $this->indexBy = $indexBy;
+
+        $className = self::getItemDtoClassName();
+
+        if (!is_subclass_of($className, DtoResolverInterface::class)) {
+            throw new InvalidCollectionItemException(DtoResolverInterface::class);
+        }
     }
 
     /**
@@ -38,14 +51,19 @@ trait CollectionDtoResolverTrait
     public function add(array $item): void
     {
         $className = self::getItemDtoClassName();
+        $entryDto = new $className($item, $this->optionsResolver);
 
-        if (!is_subclass_of($className, DtoResolverInterface::class)) {
-            throw new InvalidCollectionItemException(DtoResolverInterface::class);
+        if ($this->indexBy === null) {
+            $this->collection[] = $entryDto;
+
+            return;
         }
 
-        $entryDto = new $className($item, $this->optionsResolver);
-        $id = spl_object_hash($entryDto);
+        if (!isset($item[$this->indexBy])) {
+            throw new FieldForIndexNotFoundException($this->indexBy);
+        }
 
+        $id = $item[$this->indexBy];
         $this->collection[$id] = $entryDto;
     }
 

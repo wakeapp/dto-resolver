@@ -89,7 +89,6 @@ echo $dto->getUsername(); // test_user
 echo $dto->getEmail(); // test@gmail.com
 echo $dto->getFullName(); // Test User
 
-print_r($dto->toArray()); // Array ([email] => test@gmail.com [username] => test_user [fullName] => Test User)
 echo json_encode($dto); // {"email":"test@gmail.com","username":"test_user","fullName":"Test User"}
 ```
 
@@ -132,7 +131,12 @@ class AcmeUserDto implements DtoResolverInterface
 <?php declare(strict_types=1);
 
 $entryDto = new AcmeUserDto(['email' => 'test@gmail.com']); // ошибка: отсутвует обязательное смещение username
-$entryDto = new AcmeUserDto(['email' => 123, 'username' => 'test_user']); // ошибка: email имеет недопустимый тип данных
+$entryDto = new AcmeUserDto(['email' => 123, 'username' => 'test_user']); // ошибка: email имеет недопустимый тип
+
+$entryDto = new AcmeUserDto(['email' => 'test@gmail.com', 'username' => 'test_user']); // успех
+
+echo $entryDto->getUsername(); // test_user
+echo $entryDto->getEmail(); // test@gmail.com
 ```
 
 ### Использование коллекций DTO
@@ -169,12 +173,6 @@ $collectionDto = new AcmeUserCollectionDto();
 $collectionDto->add(['email' => '1_test@gmail.com', 'username' => '1_test_user', 'fullName' => '1 Test User']);
 $collectionDto->add(['email' => '2_test@gmail.com', 'username' => '2_test_user', 'fullName' => '2 Test User']);
 
-print_r($collectionDto->toArray()); 
-// Array (
-//      [0] => Array ( [email] => 1_test@gmail.com [username] => 1_test_user [fullName] => 1 Test User )
-//      [1] => Array ( [email] => 2_test@gmail.com [username] => 2_test_user [fullName] => 2 Test User )
-// )
-
 echo json_encode($collectionDto);
 // [
 //      {"email":"1_test@gmail.com","username":"1_test_user","fullName":"1 Test User"},
@@ -182,32 +180,33 @@ echo json_encode($collectionDto);
 // ]
 ```
 
-### Преобразование DTO в массив
+Дополнительно
+-------------
+
+### Использование собственного объекта OptionResolver
+
+В случае когда вам необходимо использовать объект `OptionResolver`,
+созданный сторонним сервисом - вы можете воспользоваться конструктором.
 
 ```php
 <?php declare(strict_types=1);
 
-/** @var \Wakeapp\Component\DtoResolver\Dto\CollectionDtoResolverInterface $collectionDto */
-$entryDto = new AcmeUserCollectionDto();
-$entryDto->add(['email' => '1_test@gmail.com', 'username' => '1_test_user', 'fullName' => '1 Test User']);
-$entryDto->add(['email' => '2_test@gmail.com', 'username' => '2_test_user', 'fullName' => '2 Test User']);
-
-echo $entryDto->getUsername(); // test_user
-echo $entryDto->getEmail(); // test@gmail.com
+$customResolver = new \Symfony\Component\OptionsResolver\OptionsResolver();
+$entryDto = new AcmeUserDto(['email' => 'test@gmail.com'], $customResolver);
+$collectionDto = new AcmeUserCollectionDto($customResolver);
 ```
 
-Дополнительно
--------------
+### Индексирование коллекции по конкретному полю
 
-### Подмена объекта OptionResolver
+Поле, по которому необходимо провести индексацию задается вторым аргументов конструктора коллекции.
 
-В случае когда вам необходимо использовать объект `OptionResolver`,
-созданный сторонним сервисом - вы можете воспользоваться методом `injectResolver`.
+```php
+<?php declare(strict_types=1);
 
-### Получение объекта OptionResolver
-
-В случае когда вам необходимо получить объект `OptionResolver` конкретного `DTO` вы можете воспользоваться
-методом `getOptionsResolver` в наследнике.
+$collectionDto = new AcmeUserCollectionDto(null, 'email');
+$collectionDto->add(['email' => '1_test@gmail.com', 'username' => '1_test_user', 'fullName' => '1 Test User']);
+$collectionDto->add(['email' => '2_test@gmail.com', 'username' => '2_test_user', 'fullName' => '2 Test User']);
+```
 
 Лицензия
 --------

@@ -1,4 +1,6 @@
 ## [Unreleased major]
+### Added
+- Added possibility to build collection by specific collection item field.
 ### Changed
 - Added `CollectionDtoResolverTrait::__construct()` with optional `OptionsResolver`.
 - Added `DtoResolverTrait::__construct()` with required `array $data` and optional `OptionsResolver`.
