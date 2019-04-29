@@ -1,6 +1,9 @@
 DTO Resolver
 ============
 
+[![Latest Stable Version](https://poser.pugx.org/wakeapp/dto-resolver/v/stable)](https://packagist.org/packages/wakeapp/dto-resolver)
+[![Total Downloads](https://poser.pugx.org/wakeapp/dto-resolver/downloads)](https://packagist.org/packages/wakeapp/dto-resolver)
+
 Введение
 --------
 
