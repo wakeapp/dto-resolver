@@ -2,11 +2,20 @@
 
 declare(strict_types=1);
 
+/*
+ * This file is part of the DtoResolver package.
+ *
+ * (c) Wakeapp <https://wakeapp.ru>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Iterator;
-use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
 use JsonSerializable;
+use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
 
 interface CollectionDtoResolverInterface extends Iterator, JsonSerializable
 {
