@@ -1,4 +1,4 @@
-## [Unreleased major]
+## [1.0.0] - 2019-04-29
 ### Added
 - Added possibility to build collection by specific collection item field.
 ### Changed
