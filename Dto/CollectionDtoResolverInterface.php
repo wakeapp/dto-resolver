@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Iterator;
-use Symfony\Component\OptionsResolver\OptionsResolver;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
 use JsonSerializable;
 
@@ -21,12 +20,11 @@ interface CollectionDtoResolverInterface extends Iterator, JsonSerializable
     public function add(array $item): void;
 
     /**
-     * Returns name of the supported entry dto
-     * @see DtoResolverInterface
+     * Returns name of the supported collection {@see DtoResolverInterface}
      *
      * @return string
      */
-    public function getEntryDtoClassName(): string;
+    public static function getItemDtoClassName(): string;
 
     /**
      * @param bool $onlyDefinedData
@@ -34,9 +32,4 @@ interface CollectionDtoResolverInterface extends Iterator, JsonSerializable
      * @return array
      */
     public function toArray(bool $onlyDefinedData = true): array;
-
-    /**
-     * @param OptionsResolver $resolver
-     */
-    public function injectResolver(OptionsResolver $resolver): void;
 }

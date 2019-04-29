@@ -5,50 +5,67 @@ declare(strict_types=1);
 namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Wakeapp\Component\DtoResolver\Exception\FieldForIndexNotFoundException;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
+use function is_subclass_of;
+use function key;
+use function next;
+use function reset;
 
 trait CollectionDtoResolverTrait
 {
-    /**
-     * @var OptionsResolver
-     */
-    private $optionsResolver;
-
     /**
      * @var DtoResolverInterface[]
      */
     private $collection = [];
 
     /**
+     * @var string|null
+     */
+    private $indexBy = null;
+
+    /**
+     * @var OptionsResolver
+     */
+    private $optionsResolver;
+
+    /**
+     * @param OptionsResolver|null $resolver
+     * @param string|null $indexBy
+     */
+    public function __construct(?OptionsResolver $resolver = null, ?string $indexBy = null)
+    {
+        $this->optionsResolver = $resolver;
+        $this->indexBy = $indexBy;
+
+        $className = self::getItemDtoClassName();
+
+        if (!is_subclass_of($className, DtoResolverInterface::class)) {
+            throw new InvalidCollectionItemException(DtoResolverInterface::class);
+        }
+    }
+
+    /**
      * @param array $item
      */
     public function add(array $item): void
     {
-        $className = $this->getEntryDtoClassName();
+        $className = self::getItemDtoClassName();
+        $entryDto = new $className($item, $this->optionsResolver);
 
-        $entryDto = new $className();
+        if ($this->indexBy === null) {
+            $this->collection[] = $entryDto;
 
-        if (!$entryDto instanceof DtoResolverInterface) {
-            throw new InvalidCollectionItemException(DtoResolverInterface::class);
+            return;
         }
 
-        $resolver = $this->getOptionsResolver();
-
-        if ($resolver) {
-            $entryDto->injectResolver($resolver);
+        if (!isset($item[$this->indexBy])) {
+            throw new FieldForIndexNotFoundException($this->indexBy);
         }
 
-        $entryDto->resolve($item);
-
-        $id = spl_object_hash($entryDto);
-
+        $id = $item[$this->indexBy];
         $this->collection[$id] = $entryDto;
     }
-
-    /**
-     * @return string
-     */
-    abstract public function getEntryDtoClassName(): string;
 
     /**
      * @param bool $onlyDefinedData
@@ -101,26 +118,10 @@ trait CollectionDtoResolverTrait
     }
 
     /**
-     * @param OptionsResolver $resolver
-     */
-    public function injectResolver(OptionsResolver $resolver): void
-    {
-        $this->optionsResolver = $resolver;
-    }
-
-    /**
      * @return array
      */
     public function jsonSerialize(): array
     {
         return $this->toArray();
-    }
-
-    /**
-     * @return OptionsResolver
-     */
-    protected function getOptionsResolver(): OptionsResolver
-    {
-        return $this->optionsResolver;
     }
 }
