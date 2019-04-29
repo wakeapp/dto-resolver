@@ -3,10 +3,11 @@
     "description": "Provides possibility for working with DTO and resolving them in them-self",
     "type":        "library",
     "keywords":    ["dto", "component", "resolver", "symfony-resolver"],
-    "license":     "proprietary",
+    "license":     "MIT",
 
     "require": {
         "php":                          "~7.1",
+        "ext-json":                     "*",
         "symfony/options-resolver":     "~2.8||~3.0||~4.0"
     },
 

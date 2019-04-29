@@ -46,6 +46,13 @@ trait CollectionDtoResolverTrait
     }
 
     /**
+     * Returns name of the supported collection {@see DtoResolverInterface}
+     *
+     * @return string
+     */
+    abstract public static function getItemDtoClassName(): string;
+
+    /**
      * @param array $item
      */
     public function add(array $item): void

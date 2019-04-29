@@ -83,13 +83,18 @@ class AcmeUserDto implements DtoResolverInterface
 ```php
 <?php declare(strict_types=1);
 
-$dto = new AcmeUserDto(['email' => 'test@gmail.com', 'username' => 'test_user', 'fullName' => 'Test User']);
+$dto = new AcmeUserDto([
+    'email' => 'test@gmail.com', 
+    'username' => 'test_user', 
+    'fullName' => 'Test User'
+]);
 
 echo $dto->getUsername(); // test_user
 echo $dto->getEmail(); // test@gmail.com
 echo $dto->getFullName(); // Test User
 
-echo json_encode($dto); // {"email":"test@gmail.com","username":"test_user","fullName":"Test User"}
+echo json_encode($dto); 
+// {"email":"test@gmail.com","username":"test_user","fullName":"Test User"}
 ```
 
 **Внимание:** важной особенностью работы компонеты - является автоматическая нормализация ключей
@@ -130,10 +135,22 @@ class AcmeUserDto implements DtoResolverInterface
 ```php
 <?php declare(strict_types=1);
 
-$entryDto = new AcmeUserDto(['email' => 'test@gmail.com']); // ошибка: отсутвует обязательное смещение username
-$entryDto = new AcmeUserDto(['email' => 123, 'username' => 'test_user']); // ошибка: email имеет недопустимый тип
+// ошибка: отсутвует обязательное смещение username
+$entryDto = new AcmeUserDto([
+    'email' => 'test@gmail.com'
+]);
 
-$entryDto = new AcmeUserDto(['email' => 'test@gmail.com', 'username' => 'test_user']); // успех
+// ошибка: email имеет недопустимый тип
+$entryDto = new AcmeUserDto([
+    'email' => 123, 
+    'username' => 'test_user'
+]);
+
+// успех
+$entryDto = new AcmeUserDto([
+    'email' => 'test@gmail.com', 
+    'username' => 'test_user'
+]);
 
 echo $entryDto->getUsername(); // test_user
 echo $entryDto->getEmail(); // test@gmail.com
@@ -170,8 +187,16 @@ class AcmeUserCollectionDto implements CollectionDtoResolverInterface
 
 /** @var \Wakeapp\Component\DtoResolver\Dto\CollectionDtoResolverInterface $collectionDto */
 $collectionDto = new AcmeUserCollectionDto();
-$collectionDto->add(['email' => '1_test@gmail.com', 'username' => '1_test_user', 'fullName' => '1 Test User']);
-$collectionDto->add(['email' => '2_test@gmail.com', 'username' => '2_test_user', 'fullName' => '2 Test User']);
+$collectionDto->add([
+    'email' => '1_test@gmail.com',
+    'username' => '1_test_user',
+    'fullName' => '1 Test User'
+]);
+$collectionDto->add([
+    'email' => '2_test@gmail.com',
+    'username' => '2_test_user',
+    'fullName' => '2 Test User'
+]);
 
 echo json_encode($collectionDto);
 // [
@@ -204,11 +229,19 @@ $collectionDto = new AcmeUserCollectionDto($customResolver);
 <?php declare(strict_types=1);
 
 $collectionDto = new AcmeUserCollectionDto(null, 'email');
-$collectionDto->add(['email' => '1_test@gmail.com', 'username' => '1_test_user', 'fullName' => '1 Test User']);
-$collectionDto->add(['email' => '2_test@gmail.com', 'username' => '2_test_user', 'fullName' => '2 Test User']);
+$collectionDto->add([
+    'email' => '1_test@gmail.com',
+     'username' => '1_test_user',
+     'fullName' => '1 Test User'
+ ]);
+$collectionDto->add([
+    'email' => '2_test@gmail.com',
+    'username' => '2_test_user',
+    'fullName' => '2 Test User'
+]);
 ```
 
 Лицензия
 --------
 
-![license](https://img.shields.io/badge/License-proprietary-red.svg?style=flat-square)
+[![license](https://img.shields.io/badge/License-MIT-green.svg?style=flat-square)](./LICENSE)
