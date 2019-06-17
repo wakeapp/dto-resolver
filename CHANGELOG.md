@@ -1,4 +1,4 @@
-## [Unrelease] - 2019-06-17
+## [1.1.0] - 2019-06-17
 ### Added
 - Added trait `DtoArrayAccessTrait` for implement ArrayAccess interface
 - Added to interface `DtoResolverInterface` function `getDefinedProperties`.
