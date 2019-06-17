@@ -15,7 +15,7 @@ namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
-use function array_flip;
+use function array_combine;
 use function array_intersect_key;
 use function array_keys;
 use function get_object_vars;
@@ -33,21 +33,37 @@ trait DtoResolverTrait
     private $optionsResolver;
 
     /**
+     * @var array
+     */
+    private $definedProperties = [];
+
+    /**
      * @param array $data
      * @param OptionsResolver|null $resolver
      *
      * @throws ExceptionInterface
      */
-    public function __construct(array $data, ?OptionsResolver $resolver = null)
+    public function __construct(array $data = [], ?OptionsResolver $resolver = null)
     {
+        $properties = $this->getProperties();
+        $this->definedProperties = array_combine($properties, $properties);
+
         $resolver = $resolver ?? new OptionsResolver();
-        $resolver->setDefined(array_keys($this->toArray(false)));
+        $resolver->setDefined($properties);
 
         $this->configureOptions($resolver);
 
         $this->optionsResolver = $resolver;
 
         $this->resolve($data);
+    }
+
+    /**
+     * @return array
+     */
+    public function getDefinedProperties(): array
+    {
+        return $this->definedProperties;
     }
 
     /**
@@ -65,12 +81,10 @@ trait DtoResolverTrait
      */
     public function toArray(bool $onlyDefinedData = true): array
     {
-        $data = get_object_vars($this);
-
-        unset($data['optionsResolver']);
+        $data = $this->getObjectVars();
 
         if ($onlyDefinedData) {
-            return $this->getOnlyDefinedData($data);
+            $data = $this->getOnlyDefinedData($data);
         }
 
         return $data;
@@ -84,13 +98,35 @@ trait DtoResolverTrait
     }
 
     /**
+     * @return array
+     */
+    protected function getProperties(): array
+    {
+        $data = $this->getObjectVars();
+
+        return array_keys($data);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getObjectVars(): array
+    {
+        $data = get_object_vars($this);
+
+        unset($data['optionsResolver'], $data['definedProperties']);
+
+        return $data;
+    }
+
+    /**
      * @param array $data
      *
      * @return array
      */
     protected function getOnlyDefinedData(array $data): array
     {
-        return array_intersect_key($data, array_flip($this->getOptionResolver()->getDefinedOptions()));
+        return array_intersect_key($data, $this->definedProperties);
     }
 
     /**
@@ -141,7 +177,9 @@ trait DtoResolverTrait
             $normalizedData[$normalizedPropertyName] = $value;
         }
 
-        $resolvedData = $this->getOptionResolver()->resolve($this->getOnlyDefinedData($normalizedData));
+        $onlyDefinedData = $this->getOnlyDefinedData($normalizedData);
+
+        $resolvedData = $this->getOptionResolver()->resolve($onlyDefinedData);
 
         foreach ($resolvedData as $propertyName => $value) {
             if (property_exists($this, $propertyName)) {

@@ -1,3 +1,11 @@
+## [Unrelease] - 2019-06-17
+### Added
+- Added trait `DtoArrayAccessTrait` for implement ArrayAccess interface
+- Added to interface `DtoResolverInterface` function `getDefinedProperties`.
+### Changed
+- Changed `DtoResolverTrait` added implementation `DtoResolverInterface`.
+- Changed `CollectionDtoResolverInterface` optimization code.
+
 ## [1.0.0] - 2019-04-29
 ### Added
 - Added possibility to build collection by specific collection item field.

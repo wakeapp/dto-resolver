@@ -16,7 +16,6 @@ namespace Wakeapp\Component\DtoResolver\Dto;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Wakeapp\Component\DtoResolver\Exception\FieldForIndexNotFoundException;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
-use function is_subclass_of;
 use function key;
 use function next;
 use function reset;
@@ -29,14 +28,19 @@ trait CollectionDtoResolverTrait
     private $collection = [];
 
     /**
-     * @var string|null
-     */
-    private $indexBy = null;
-
-    /**
      * @var OptionsResolver
      */
     private $optionsResolver;
+
+    /**
+     * @var string|null
+     */
+    private $indexBy;
+
+    /**
+     * @var string|null
+     */
+    private $className;
 
     /**
      * @param OptionsResolver|null $resolver
@@ -47,9 +51,9 @@ trait CollectionDtoResolverTrait
         $this->optionsResolver = $resolver;
         $this->indexBy = $indexBy;
 
-        $className = self::getItemDtoClassName();
+        $this->className = self::getItemDtoClassName();
 
-        if (!is_subclass_of($className, DtoResolverInterface::class)) {
+        if (!is_subclass_of($this->className, DtoResolverInterface::class)) {
             throw new InvalidCollectionItemException(DtoResolverInterface::class);
         }
     }
@@ -66,21 +70,21 @@ trait CollectionDtoResolverTrait
      */
     public function add(array $item): void
     {
-        $className = self::getItemDtoClassName();
-        $entryDto = new $className($item, $this->optionsResolver);
+        $collectionItem = new $this->className($item, $this->optionsResolver);
 
         if ($this->indexBy === null) {
-            $this->collection[] = $entryDto;
+            $this->collection[] = $collectionItem;
 
             return;
         }
 
-        if (!isset($item[$this->indexBy])) {
+        $key = $item[$this->indexBy] ?? null;
+
+        if (null === $key) {
             throw new FieldForIndexNotFoundException($this->indexBy);
         }
 
-        $id = $item[$this->indexBy];
-        $this->collection[$id] = $entryDto;
+        $this->collection[$key] = $collectionItem;
     }
 
     /**
@@ -92,14 +96,14 @@ trait CollectionDtoResolverTrait
     {
         $result = [];
 
-        foreach ($this->collection as $item) {
-            $result[] = $item->toArray($onlyDefinedData);
+        foreach ($this->collection as $key => $item) {
+            $result[$key] = $item->toArray($onlyDefinedData);
         }
 
         return $result;
     }
 
-    public function next()
+    public function next(): void
     {
         next($this->collection);
     }
@@ -107,12 +111,12 @@ trait CollectionDtoResolverTrait
     /**
      * @return DtoResolverInterface
      */
-    public function current()
+    public function current(): DtoResolverInterface
     {
         return $this->collection[$this->key()];
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->collection);
     }
