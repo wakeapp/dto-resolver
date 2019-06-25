@@ -1,3 +1,7 @@
+## [1.1.1] - 2019-06-25
+### Fixed
+- Fixed properties selection with not empty option resolver in `DtoResolverTrait`.
+
 ## [1.1.0] - 2019-06-17
 ### Added
 - Added trait `DtoArrayAccessTrait` for implement ArrayAccess interface

@@ -46,6 +46,11 @@ trait DtoResolverTrait
     public function __construct(array $data = [], ?OptionsResolver $resolver = null)
     {
         $properties = $this->getProperties();
+
+        if ($resolver) {
+            $properties = array_unique(array_merge($properties, $resolver->getDefinedOptions()));
+        }
+
         $this->definedProperties = array_combine($properties, $properties);
 
         $resolver = $resolver ?? new OptionsResolver();
