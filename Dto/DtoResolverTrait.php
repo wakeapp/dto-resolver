@@ -33,7 +33,7 @@ trait DtoResolverTrait
     private $optionsResolver;
 
     /**
-     * @var array
+     * @var string[]
      */
     private $definedProperties = [];
 
@@ -64,7 +64,7 @@ trait DtoResolverTrait
     }
 
     /**
-     * @return array
+     * @return string[]
      */
     public function getDefinedProperties(): array
     {
