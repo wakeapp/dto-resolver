@@ -1,3 +1,7 @@
+## [1.1.3] - 2020-09-04
+### Patch
+- Added Symfony 5 support
+
 ## [1.1.2] - 2020-09-04
 ### Patch
 - Change annotation property type of `DtoResolverTrait::definedProperties` and annotation return type `DtoResolverTrait::getDefinedProperties()`.
