@@ -1,6 +1,6 @@
 ## [Unreleased]
 ### Added
-- Support PHP ^8.0
+- Support PHP ~8.0.
 
 ## [1.1.3] - 2020-09-04
 ### Patch
