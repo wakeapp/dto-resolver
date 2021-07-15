@@ -1,4 +1,6 @@
 ## [Unreleased]
+### Added
+- Support type hinted property.
 
 ## [1.1.4] - 2021-02-24
 ### Added

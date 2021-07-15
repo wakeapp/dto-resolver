@@ -18,7 +18,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use function array_combine;
 use function array_intersect_key;
 use function array_keys;
-use function get_object_vars;
+use function get_class;
+use function get_class_vars;
 use function lcfirst;
 use function property_exists;
 use function str_replace;
@@ -117,7 +118,7 @@ trait DtoResolverTrait
      */
     protected function getObjectVars(): array
     {
-        $data = get_object_vars($this);
+        $data = get_class_vars(get_class($this));
 
         unset($data['optionsResolver'], $data['definedProperties']);
 
