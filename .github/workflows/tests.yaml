@@ -23,6 +23,6 @@ jobs:
         run: |
           composer install
 
-      - name: Run functionnal and unit tests
+      - name: Run tests
         run: |
           ./vendor/bin/phpunit
