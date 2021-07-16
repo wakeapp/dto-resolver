@@ -20,6 +20,7 @@ use function array_intersect_key;
 use function array_keys;
 use function get_class;
 use function get_class_vars;
+use function get_object_vars;
 use function lcfirst;
 use function property_exists;
 use function str_replace;
@@ -108,17 +109,14 @@ trait DtoResolverTrait
      */
     protected function getProperties(): array
     {
-        $data = $this->getObjectVars();
+        $data = $this->getObjectVars(true);
 
         return array_keys($data);
     }
 
-    /**
-     * @return array
-     */
-    protected function getObjectVars(): array
+    protected function getObjectVars(bool $classVars = false): array
     {
-        $data = get_class_vars(get_class($this));
+        $data = $classVars ? get_class_vars(get_class($this)) : get_object_vars($this);
 
         unset($data['optionsResolver'], $data['definedProperties']);
 
@@ -186,7 +184,6 @@ trait DtoResolverTrait
         $onlyDefinedData = $this->getOnlyDefinedData($normalizedData);
 
         $resolvedData = $this->getOptionResolver()->resolve($onlyDefinedData);
-
         foreach ($resolvedData as $propertyName => $value) {
             if (property_exists($this, $propertyName)) {
                 $this->$propertyName = $value;

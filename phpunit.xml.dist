@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit colors="true" bootstrap="vendor/autoload.php">
+    <testsuites>
+        <testsuite name="Dto resolver test suite">
+            <file>./Tests/Dto/CollectionDtoResolverTraitTest.php</file>
+            <file>./Tests/Dto/DtoResolverTraitTest.php</file>
+            <directory phpVersion="7.4" phpVersionOperator=">=">./Tests/Dto/php74</directory>
+        </testsuite>
+    </testsuites>
+</phpunit>
