@@ -1,6 +1,8 @@
 ## [Unreleased]
 ### Added
-- Support type hinted property.
+- Added tests for `DtoResolverTrait`, `CollectionDtoResolverTrait`.
+### Fixed
+- Support type hinted property fix.
 
 ## [1.1.4] - 2021-02-24
 ### Added
