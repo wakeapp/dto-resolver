@@ -1,4 +1,4 @@
-name: Test matrix
+name: PHPUnit
 
 on: [pull_request]
 

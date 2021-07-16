@@ -15,6 +15,7 @@ namespace Wakeapp\Component\DtoResolver\Dto;
 
 use Symfony\Component\OptionsResolver\Exception\ExceptionInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+
 use function array_combine;
 use function array_intersect_key;
 use function array_keys;
@@ -40,9 +41,6 @@ trait DtoResolverTrait
     private $definedProperties = [];
 
     /**
-     * @param array $data
-     * @param OptionsResolver|null $resolver
-     *
      * @throws ExceptionInterface
      */
     public function __construct(array $data = [], ?OptionsResolver $resolver = null)
@@ -73,19 +71,11 @@ trait DtoResolverTrait
         return $this->definedProperties;
     }
 
-    /**
-     * @return array
-     */
     public function jsonSerialize(): array
     {
         return $this->toArray();
     }
 
-    /**
-     * @param bool $onlyDefinedData
-     *
-     * @return array
-     */
     public function toArray(bool $onlyDefinedData = true): array
     {
         $data = $this->getObjectVars();
@@ -97,26 +87,29 @@ trait DtoResolverTrait
         return $data;
     }
 
-    /**
-     * @param OptionsResolver $resolver
-     */
     protected function configureOptions(OptionsResolver $resolver): void
     {
     }
 
-    /**
-     * @return array
-     */
     protected function getProperties(): array
     {
-        $data = $this->getObjectVars(true);
+        $data = $this->getClassVars();
 
         return array_keys($data);
     }
 
-    protected function getObjectVars(bool $classVars = false): array
+    protected function getObjectVars(): array
     {
-        $data = $classVars ? get_class_vars(get_class($this)) : get_object_vars($this);
+        $data = get_object_vars($this);
+
+        unset($data['optionsResolver'], $data['definedProperties']);
+
+        return $data;
+    }
+
+    protected function getClassVars(): array
+    {
+        $data = get_class_vars(get_class($this));
 
         unset($data['optionsResolver'], $data['definedProperties']);
 

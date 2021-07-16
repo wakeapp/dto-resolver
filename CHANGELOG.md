@@ -1,6 +1,6 @@
 ## [Unreleased]
 ### Added
-- Added tests for `DtoResolverTrait`, `CollectionDtoResolverTrait`.
+- Added tests for `DtoResolverTrait`, `CollectionDtoResolverTrait`, `DtoArrayAccessTrait`.
 ### Fixed
 - Support type hinted property fix.
 

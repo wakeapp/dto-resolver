@@ -17,49 +17,31 @@ use function property_exists;
 
 trait DtoArrayAccessTrait
 {
-    /**
-     * {@inheritdoc}
-     */
     public function offsetExists($propertyName): bool
     {
         return property_exists($this, $propertyName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetGet($propertyName)
     {
         return $this->$propertyName;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetSet($propertyName, $value): void
     {
         $this->$propertyName = $value;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function offsetUnset($propertyName): void
     {
         $this->$propertyName = null;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __get($propertyName)
     {
         return $this->offsetGet($propertyName);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function __isset($propertyName): bool
     {
         return $this->offsetExists($propertyName);
