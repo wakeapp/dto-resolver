@@ -8,11 +8,8 @@ jobs:
     strategy:
       matrix:
         php-versions: ['7.1', '7.2', '7.3', '7.4', '8.0']
-        phpunit-versions: ['latest']
-        include:
-          - operating-system: 'ubuntu-latest'
-            php-versions: '7.2'
-            phpunit-versions: '8.5.13'
+        phpunit-versions: ['8.5', '8.5', '9.5', '9.5', '9.5']
+
     steps:
       - name: Checkout
         uses: actions/checkout@v2
@@ -21,7 +18,11 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
-          tools: phpunit:${{ matrix.phpunit-versions }}
+          tools: composer, phpunit:${{ matrix.phpunit-versions }}
+
+      - name: Composer install
+        run: |
+          composer install
 
       - name: Run functionnal and unit tests
         run: |
