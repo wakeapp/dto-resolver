@@ -76,6 +76,9 @@ trait DtoResolverTrait
         return $this->toArray();
     }
 
+    /**
+     * TODO toArray with $onlyDefinedData = false returns only defined data, this bug need fix
+     */
     public function toArray(bool $onlyDefinedData = true): array
     {
         $data = $this->getObjectVars();
