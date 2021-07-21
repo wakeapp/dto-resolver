@@ -1,6 +1,8 @@
 DTO Resolver
 ============
 
+# WARNING: This repo is no longer actively maintained
+
 [![Latest Stable Version](https://poser.pugx.org/wakeapp/dto-resolver/v/stable)](https://packagist.org/packages/wakeapp/dto-resolver)
 [![Total Downloads](https://poser.pugx.org/wakeapp/dto-resolver/downloads)](https://packagist.org/packages/wakeapp/dto-resolver)
 
