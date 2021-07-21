@@ -15,5 +15,9 @@
         "psr-4": {
             "Wakeapp\\Component\\DtoResolver\\": ""
         }
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "^7.0 || ^8.0 || ^9.0"
     }
 }

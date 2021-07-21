@@ -16,6 +16,7 @@ namespace Wakeapp\Component\DtoResolver\Dto;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Wakeapp\Component\DtoResolver\Exception\FieldForIndexNotFoundException;
 use Wakeapp\Component\DtoResolver\Exception\InvalidCollectionItemException;
+
 use function key;
 use function next;
 use function reset;
@@ -42,10 +43,6 @@ trait CollectionDtoResolverTrait
      */
     private $className;
 
-    /**
-     * @param OptionsResolver|null $resolver
-     * @param string|null $indexBy
-     */
     public function __construct(?OptionsResolver $resolver = null, ?string $indexBy = null)
     {
         $this->optionsResolver = $resolver;
@@ -60,14 +57,9 @@ trait CollectionDtoResolverTrait
 
     /**
      * Returns name of the supported collection {@see DtoResolverInterface}
-     *
-     * @return string
      */
     abstract public static function getItemDtoClassName(): string;
 
-    /**
-     * @param array $item
-     */
     public function add(array $item): void
     {
         $collectionItem = new $this->className($item, $this->optionsResolver);
@@ -87,11 +79,6 @@ trait CollectionDtoResolverTrait
         $this->collection[$key] = $collectionItem;
     }
 
-    /**
-     * @param bool $onlyDefinedData
-     *
-     * @return array
-     */
     public function toArray(bool $onlyDefinedData = true): array
     {
         $result = [];
@@ -108,9 +95,6 @@ trait CollectionDtoResolverTrait
         next($this->collection);
     }
 
-    /**
-     * @return DtoResolverInterface
-     */
     public function current(): DtoResolverInterface
     {
         return $this->collection[$this->key()];
@@ -129,17 +113,11 @@ trait CollectionDtoResolverTrait
         return key($this->collection);
     }
 
-    /**
-     * @return bool
-     */
     public function valid(): bool
     {
         return isset($this->collection[$this->key()]);
     }
 
-    /**
-     * @return array
-     */
     public function jsonSerialize(): array
     {
         return $this->toArray();

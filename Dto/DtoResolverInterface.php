@@ -19,17 +19,11 @@ interface DtoResolverInterface extends JsonSerializable
 {
     /**
      * Returns Dto properties as array
-     *
-     * @param bool $onlyDefinedData
-     *
-     * @return array
      */
     public function toArray(bool $onlyDefinedData = true): array;
 
     /**
      * Returns Dto initial properties as array
-     *
-     * @return array
      */
     public function getDefinedProperties(): array;
 }
